@@ -2,13 +2,11 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
-import { LatestInvoice } from '@/app/lib/definitions';
+import { fetchLatestInvoices } from '@/app/lib/data';
 
-export default async function LatestInvoices({
-  latestInvoices,
-}: {
-  latestInvoices: LatestInvoice[];
-}) {
+export default async function LatestInvoices() {
+  const latestInvoices = await fetchLatestInvoices();
+
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -20,12 +18,9 @@ export default async function LatestInvoices({
             return (
               <div
                 key={invoice.id}
-                className={clsx(
-                  'flex flex-row items-center justify-between py-4',
-                  {
-                    'border-t': i !== 0,
-                  },
-                )}
+                className={clsx('flex flex-row items-center justify-between py-4', {
+                  'border-t': i !== 0,
+                })}
               >
                 <div className="flex items-center">
                   <Image
@@ -44,18 +39,18 @@ export default async function LatestInvoices({
                     </p>
                   </div>
                 </div>
-                <p
-                  className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
-                >
+
+                <p className={`${lusitana.className} truncate text-sm font-medium md:text-base`}>
                   {invoice.amount}
                 </p>
               </div>
             );
           })}
         </div>
+
         <div className="flex items-center pb-2 pt-6">
           <ArrowPathIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Updated just now</h3>
+          <h3 className="ml-2 text-sm text-gray-500">Updated just now</h3>
         </div>
       </div>
     </div>
